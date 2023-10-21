@@ -15,23 +15,23 @@ void PulseGenerator::setRPS(float rps)
     
     //  detach and attach
     _ticker.detach();
-    float interval = 1.0 / (_pps * 4);
+    float interval = 1.0 / (abs(_pps) * 4);
     _ticker.attach(this, &PulseGenerator::generatePulse, interval);
 }
 
 void PulseGenerator::generatePulse() {
     switch (_state) {
         case 0:
-            _A = 1;
-            _B = 0;
+            _A = _pps > 0 ? 1 : 0;
+            _B = _pps > 0 ? 0 : 1;
             break;
         case 1:
             _A = 1;
             _B = 1;
             break;
         case 2:
-            _A = 0;
-            _B = 1;
+            _A = _pps > 0 ? 0 : 1;
+            _B = _pps > 0 ? 1 : 0;
             break;
         case 3:
             _A = 0;
